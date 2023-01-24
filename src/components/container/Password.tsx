@@ -8,7 +8,6 @@ export const Password: React.FC = () => {
   const [device, setDevice] = useState<deviceType>("ipad");
   const generatePassword = async () => {
     // Create a random password
-    // const randomPassword =
     //   Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
     const randomPassword = Math.random()
       .toString()

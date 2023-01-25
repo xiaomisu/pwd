@@ -1,37 +1,21 @@
 import React, { useState } from "react";
 import "./password.scss";
-import { notification } from "antd";
-import bcrypt from "bcryptjs";
+import {Post} from "../../http";
 
 export const Password: React.FC = () => {
   const [length, setLength] = useState(4);
+  const [pwd, setPwd] = useState(0);
   const [device, setDevice] = useState<deviceType>("ipad");
   const generatePassword = async () => {
-    // Create a random password
-    //   Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2);
-    const randomPassword = Math.random()
-      .toString()
-      .slice(2, 2 + length);
-    // Set the generated password as state
 
-    const saltRounds = 10;
-
-    const salt = bcrypt.genSaltSync(saltRounds);
-    const hash = bcrypt.hashSync("B4c0//", salt);
-    console.log(hash);
-    // const hash = bcrypt.hashSync(myPlaintextPassword, salt);
-    // console.log(hash);
-    // Store hash in your password DB.
-
-    // copy the password to the clipboard & fire toast message
-
-    navigator.clipboard.writeText(randomPassword).then((res) => {
-      notification.open({ message: "Password copied to your clipboard" });
+   const data = await Post('/api/pwd/insert', {device: device, length: length})
+      const {pwd, id} = data
+      setPwd(Number(pwd))
       window.localStorage.setItem(
-        `password${new Date(Date.now())}`,
-        randomPassword + device
+          `password${new Date(Date.now())}` + ' ' + device,
+          id
       );
-    });
+
   };
   return (
     <div className="background">
@@ -63,9 +47,20 @@ export const Password: React.FC = () => {
             </select>
           </div>
 
-          <button className="generate-password" onClick={generatePassword}>
+          <button className="generate-password mb-4" onClick={generatePassword}>
             Generate password
           </button>
+
+          <div className="flex flex-row justify-start mb-4  basis-1/2">
+           show password 60s：
+            <input
+                type="number"
+                className=" ml-3 "
+                value={pwd}
+                onChange={(event) => setPwd(Number(event.target.value))}
+            />
+          </div>
+
         </div>
       </div>
     </div>

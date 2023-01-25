@@ -8,16 +8,21 @@ import {
   handleNetworkError,
 } from "./tools";
 
-type Fn = (data: FcResponse<any>) => unknown;
+type Fn = (data: dataType) => dataType;
 
 interface IAnyObj {
   [index: string]: unknown;
 }
 
+interface dataType {
+    pwd: string;
+    id:string
+}
+
 interface FcResponse<T> {
   errno: string;
   errmsg: string;
-  data: T;
+  data: dataType;
 }
 
 axios.interceptors.request.use((config) => {
@@ -43,21 +48,21 @@ export const Get = <T>(
   url: string,
   params: IAnyObj = {},
   clearFn?: Fn
-): Promise<[any, FcResponse<T> | undefined]> =>
+): Promise<dataType> =>
   new Promise((resolve) => {
     axios
       .get(url, { params })
       .then((result) => {
-        let res: FcResponse<T>;
+        let res: dataType;
         if (clearFn !== undefined) {
-          res = clearFn(result.data) as unknown as FcResponse<T>;
+          res = clearFn(result.data) ;
         } else {
-          res = result.data as FcResponse<T>;
+          res = result.data ;
         }
-        resolve([null, res as FcResponse<T>]);
+        resolve(res);
       })
       .catch((err) => {
-        resolve([err, undefined]);
+        resolve(err);
       });
   });
 
@@ -65,15 +70,15 @@ export const Post = <T>(
   url: string,
   data: IAnyObj,
   params: IAnyObj = {}
-): Promise<[any, FcResponse<T> | undefined]> => {
+): Promise< dataType> => {
   return new Promise((resolve) => {
     axios
       .post(url, data, { params })
       .then((result) => {
-        resolve([null, result.data as FcResponse<T>]);
+        resolve(result as unknown as dataType);
       })
       .catch((err) => {
-        resolve([err, undefined]);
+        resolve(err);
       });
   });
 };

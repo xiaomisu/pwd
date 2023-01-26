@@ -8,7 +8,7 @@ export const Password: React.FC = () => {
   const [device, setDevice] = useState<deviceType>("ipad");
   const generatePassword = async () => {
 
-   const data = await Post('/api/pwd/insert', {device: device, length: length})
+   const {data} = await Post('/api/pwd/insert', {device: device, length: length})
       const {pwd, id} = data
       setPwd(Number(pwd))
       window.localStorage.setItem(

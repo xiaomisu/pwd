@@ -8,13 +8,13 @@ import {
   handleNetworkError,
 } from "./tools";
 
-type Fn = (data: dataType) => dataType;
+type Fn = (data: dataType) => FcResponse<dataType>;
 
 interface IAnyObj {
   [index: string]: unknown;
 }
 
-interface dataType {
+export interface dataType {
     pwd: string;
     id:string
 }
@@ -48,12 +48,12 @@ export const Get = <T>(
   url: string,
   params: IAnyObj = {},
   clearFn?: Fn
-): Promise<dataType> =>
+): Promise<FcResponse<T>> =>
   new Promise((resolve) => {
     axios
       .get(url, { params })
       .then((result) => {
-        let res: dataType;
+        let res: FcResponse<T>;
         if (clearFn !== undefined) {
           res = clearFn(result.data) ;
         } else {
@@ -70,12 +70,12 @@ export const Post = <T>(
   url: string,
   data: IAnyObj,
   params: IAnyObj = {}
-): Promise< dataType> => {
+): Promise< FcResponse<dataType>> => {
   return new Promise((resolve) => {
     axios
       .post(url, data, { params })
       .then((result) => {
-        resolve(result as unknown as dataType);
+        resolve(result as unknown as FcResponse<dataType>);
       })
       .catch((err) => {
         resolve(err);

@@ -33,7 +33,7 @@ export const Password: React.FC = () => {
           </div>
           <div className="flex flex-row justify-start mb-4 w-1/2">
             select devices:
-            <select
+            <input
               value={device}
               onChange={(event) => {
                 setDevice(event.target.value as deviceType);
@@ -41,10 +41,7 @@ export const Password: React.FC = () => {
               className="ml-3"
               aria-label="Default select example"
             >
-              <option value="ipad">ipad</option>
-              <option value="lg">lg</option>
-              <option value="mi">mi</option>
-            </select>
+            </input>
           </div>
 
           <button className="generate-password mb-4" onClick={generatePassword}>
